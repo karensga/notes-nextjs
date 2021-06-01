@@ -18,29 +18,46 @@ const NotesContainer = () => {
     }
 
     const handleAddNote = async ({ description, color, id = '' }) => {
-        await db.addNote({
+        const response = await db.addNote({
             description: description,
             color: color,
             id
         })
 
+        if (id) {
+            const arrayWithNoteDescriptionUpdated = notes.map(note => note.id === id ? { ...note, description } : note)
+            setNotes(arrayWithNoteDescriptionUpdated)
+        } else {
+
+            setNotes([...notes, {
+                id:response,
+                description,
+                color,
+                date:moment().format('MMM D, YYYY. hh:mm a'),
+                isImportant:false,
+            }])
+        }
+
+        handleNewNote(color)
     }
 
     const handleDeleteNote = async (id) => {
         await db.deleteNote(id)
-        const deleteNote = notes.filter(note => note.id !== id)
-        setNotes(deleteNote)
+        const arrayWithNoteDeleted = notes.filter(note => note.id !== id)
+        setNotes(arrayWithNoteDeleted)
     }
 
     const handleUpdateIsImportant = async (id, isImportant) => {
         await db.updateNoteIsImportant(id, isImportant)
+        const arrayWithNoteUpdated = notes.map(note => note.id === id ? { ...note, isImportant } : note)
+        setNotes(arrayWithNoteUpdated)
 
     }
 
     useEffect(async () => {
         const res = await db.getAllNotes()
-        console.log(res)
-    }, [handleDeleteNote, handleUpdateIsImportant, handleAddNote])
+        setNotes(res)
+    }, [])
 
 
     return (
@@ -63,7 +80,7 @@ const NotesContainer = () => {
                             onUpdateIsImportant={handleUpdateIsImportant}
                             newNote={true}
                         />
-                    }                
+                    }
                     {
                         notes?.map(({ description, date, isImportant, color, id }) => (
                             <Note
