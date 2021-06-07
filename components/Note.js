@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Edit from '@icons/Edit'
 import Star from '@icons/Star' 
 import Delete from '@icons/Delete'
@@ -7,10 +7,13 @@ import { useForm } from 'react-hook-form'
 const Note = (props) => {
     const { id, date, color, description, isImportant, onAdd, onDelete, newNote = false, onUpdateIsImportant } = props
     const [edit, setEdit] = useState(newNote)
+    const buttons = useRef()
 
     const { register, handleSubmit } = useForm()
 
     const handleOnSubmit = (data) => {
+        
+            
         const { description } = data
         if (!description) {
             setEdit(!edit)
@@ -29,9 +32,13 @@ const Note = (props) => {
     }
 
     const onEnterPress = (e) => {
-        if (e.keyCode == 13 && e.shiftKey == false) {
-            document.getElementById("form").submit();
-            e.preventDefault();
+        
+        if (e.which == 13 ) {
+            
+            e.preventDefault()
+            console.log(buttons)
+            buttons.current.click()
+           
         }
     }
 
@@ -41,10 +48,14 @@ const Note = (props) => {
 
             {
                 edit ? (
-                    <form id="form" autoComplete="off" onSubmit={handleSubmit(handleOnSubmit)}>
-                        <input type="text" autoFocus="autofocus" defaultValue={description} cols="18" rows="5" className={`bg-transparent focus:outline-none`} {...register("description", { required: false })} />
+                    <form autoComplete="off" onSubmit={handleSubmit(handleOnSubmit)}>
+                        <textarea onKeyPress={onEnterPress} type="text" autoFocus="autofocus" defaultValue={description} cols="18" rows="5" className={`bg-transparent focus:outline-none`} {...register("description", { required: false })} />
+                        <button ref={buttons} type="submit"></button>
                     </form>
-                ) : description
+                ) : (
+                
+                    <p className="w-full h-full overflow-ellipsis overflow-hidden">{description}</p>
+                )
             }
 
             <p className="absolute bottom-5 left-6 text-xs">{date}</p>

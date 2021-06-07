@@ -18,6 +18,7 @@ const NotesContainer = () => {
     }
 
     const handleAddNote = async ({ description, color, id = '' }) => {
+        debugger
         const response = await db.addNote({
             description: description,
             color: color,
@@ -27,15 +28,16 @@ const NotesContainer = () => {
         if (id) {
             const arrayWithNoteDescriptionUpdated = notes.map(note => note.id === id ? { ...note, description } : note)
             setNotes(arrayWithNoteDescriptionUpdated)
+            return false
         } else {
 
-            setNotes([...notes, {
+            setNotes([{
                 id:response,
                 description,
                 color,
                 date:moment().format('MMM D, YYYY. hh:mm a'),
                 isImportant:false,
-            }])
+            }, ...notes])
         }
 
         handleNewNote(color)
