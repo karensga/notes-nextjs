@@ -2,11 +2,8 @@ import { useState, useEffect } from 'react'
 import SideBar from '@components/SideBar'
 import Note from '@components/Note'
 import moment from 'moment'
-import { Firebase } from '@lib/firebase'
 
 const NotesContainer = () => {
-
-    const db = new Firebase();
 
     const [notes, setNotes] = useState([])
     const [newNote, setNewNote] = useState(false)
@@ -18,49 +15,35 @@ const NotesContainer = () => {
     }
 
     const handleAddNote = async ({ description, color, id = '' }) => {
-        debugger
-        const response = await db.addNote({
-            description: description,
-            color: color,
-            id
-        })
 
         if (id) {
             const arrayWithNoteDescriptionUpdated = notes.map(note => note.id === id ? { ...note, description } : note)
             setNotes(arrayWithNoteDescriptionUpdated)
             return false
         } else {
-
+            let numberRandom = Math.floor(Math.random()*100000)
             setNotes([{
-                id:response,
+                id: numberRandom,
                 description,
                 color,
-                date:moment().format('MMM D, YYYY. hh:mm a'),
-                isImportant:false,
+                date: moment().format('MMM D, YYYY. hh:mm a'),      
+                isImportant: false,
             }, ...notes])
         }
 
         handleNewNote(color)
     }
 
-    const handleDeleteNote = async (id) => {
-        await db.deleteNote(id)
+    const handleDeleteNote = (id) => {
         const arrayWithNoteDeleted = notes.filter(note => note.id !== id)
         setNotes(arrayWithNoteDeleted)
     }
 
-    const handleUpdateIsImportant = async (id, isImportant) => {
-        await db.updateNoteIsImportant(id, isImportant)
+    const handleUpdateIsImportant =  (id, isImportant) => {
         const arrayWithNoteUpdated = notes.map(note => note.id === id ? { ...note, isImportant } : note)
         setNotes(arrayWithNoteUpdated)
 
     }
-
-    useEffect(async () => {
-        const res = await db.getAllNotes()
-        setNotes(res)
-    }, [])
-
 
     return (
         <>
