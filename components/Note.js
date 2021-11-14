@@ -36,7 +36,6 @@ const Note = (props) => {
         if (e.which == 13 ) {
             
             e.preventDefault()
-            console.log(buttons)
             buttons.current.click()
            
         }

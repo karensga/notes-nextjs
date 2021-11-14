@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { getNotesFirebase, addNoteFirebase, deleteNoteFirebase, updateNoteFirebase } from '../firebase/client'
 import SideBar from '@components/SideBar'
 import Note from '@components/Note'
 import moment from 'moment'
@@ -14,32 +15,40 @@ const NotesContainer = () => {
         setColor(color)
     }
 
+    useEffect(async () => {
+        const res = await getNotesFirebase()
+        setNotes(res)
+    }, [])
+
     const handleAddNote = async ({ description, color, id = '' }) => {
 
         if (id) {
+            updateNoteFirebase(id, null, description)
             const arrayWithNoteDescriptionUpdated = notes.map(note => note.id === id ? { ...note, description } : note)
             setNotes(arrayWithNoteDescriptionUpdated)
             return false
         } else {
-            let numberRandom = Math.floor(Math.random()*100000)
-            setNotes([{
-                id: numberRandom,
+            const newNote = {
                 description,
                 color,
-                date: moment().format('MMM D, YYYY. hh:mm a'),      
+                date: moment().format('MMM D, YYYY. hh:mm a'),
                 isImportant: false,
-            }, ...notes])
+            }
+            addNoteFirebase(newNote)
+            setNotes([newNote, ...notes])
         }
 
         handleNewNote(color)
     }
 
     const handleDeleteNote = (id) => {
+        deleteNoteFirebase(id)
         const arrayWithNoteDeleted = notes.filter(note => note.id !== id)
         setNotes(arrayWithNoteDeleted)
     }
 
-    const handleUpdateIsImportant =  (id, isImportant) => {
+    const handleUpdateIsImportant = (id, isImportant) => {
+        updateNoteFirebase(id, isImportant, null)
         const arrayWithNoteUpdated = notes.map(note => note.id === id ? { ...note, isImportant } : note)
         setNotes(arrayWithNoteUpdated)
 
@@ -71,7 +80,7 @@ const NotesContainer = () => {
                             <Note
                                 key={id}
                                 id={id}
-                                date={date ? date : ""}
+                                date={/* date ? date :  */""}
                                 description={description}
                                 isImportant={isImportant}
                                 color={color}
