@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { getNotesFirebase, addNoteFirebase, deleteNoteFirebase, updateNoteFirebase } from '../firebase/client'
 import SideBar from '@components/SideBar'
 import Note from '@components/Note'
+import LayoutMain from '@components/LayoutMain'
 import moment from 'moment'
 
 const NotesContainer = () => {
@@ -57,10 +58,8 @@ const NotesContainer = () => {
     return (
         <>
             <SideBar onNewNote={handleNewNote} />
-            <div className="ml-2/12 sm:ml-1/12 sm:w-11/12 w-10/12">
-
-                <h1 className="p-4 text-bold text-2xl mt-4 sm:text-4xl">Notes</h1>
-                <div className="p-4 w-full h-auto space-y-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
+            <LayoutMain children={
+                <>
                     {
                         newNote &&
                         <Note
@@ -80,7 +79,7 @@ const NotesContainer = () => {
                             <Note
                                 key={id}
                                 id={id}
-                                date={/* date ? date :  */""}
+                                date={date ? date : ""}
                                 description={description}
                                 isImportant={isImportant}
                                 color={color}
@@ -90,9 +89,9 @@ const NotesContainer = () => {
                             />
                         ))
                     }
-
-                </div>
-            </div>
+                </>
+            }
+            />
         </>
     )
 }
