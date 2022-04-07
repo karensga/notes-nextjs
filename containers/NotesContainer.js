@@ -58,7 +58,7 @@ const NotesContainer = () => {
     return (
         <>
             <SideBar onNewNote={handleNewNote} />
-            <LayoutMain children={
+            <LayoutMain>
                 <>
                     {
                         newNote &&
@@ -74,12 +74,13 @@ const NotesContainer = () => {
                             newNote={true}
                         />
                     }
+                    
                     {
                         notes?.map(({ description, date, isImportant, color, id }) => (
                             <Note
                                 key={id}
                                 id={id}
-                                date={date ? date : ""}
+                                date={moment(date.nanoseconds).format('MMM D, YYYY. hh:mm a')}
                                 description={description}
                                 isImportant={isImportant}
                                 color={color}
@@ -90,8 +91,7 @@ const NotesContainer = () => {
                         ))
                     }
                 </>
-            }
-            />
+                </LayoutMain>
         </>
     )
 }

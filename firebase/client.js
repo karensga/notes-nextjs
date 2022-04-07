@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app'
+import { initializeApp, getApp, getApps } from 'firebase/app'
 import 'firebase/auth'
 import { getFirestore, collection, getDocs, addDoc, deleteDoc, updateDoc, query, doc } from 'firebase/firestore'
 
@@ -8,12 +8,18 @@ const clientCredentials = {
     projectId: process.env.NEXT_PUBLIC_FIREABSE_PROJECT_ID,
     storageBucket: process.env.NEXT_PUBLIC_FIREABSE_STORAGE_BUCKET,
     messagingSenderId: process.env.NEXT_PUBLIC_FIREABSE_MESSAGING_SENDER_ID,
-    appId: process.env.NEXT_PUBLIC_FIREABSE_APP_ID
+    appId: process.env.NEXT_PUBLIC_FIREABSE_APP_ID,
+    databaseURL: "https://notes-nextjs-default-rtdb.firebaseio.com",
 }
 
-const app = initializeApp(clientCredentials)
+let firebaseApp
+if (!getApps().length) {     
+    firebaseApp = initializeApp(clientCredentials)
+} else {     
+    firebaseApp = getApp()
+}
 
-const db = getFirestore(app)
+const db = getFirestore(firebaseApp)
 
 export const getNotesFirebase = async () => {
     const notes = query(collection(db, 'notes'))
