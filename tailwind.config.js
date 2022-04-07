@@ -28,6 +28,8 @@ module.exports = {
   variants: {
     extend: {
       display: ['hover', 'focus'],
+      width: ['hover'],
+      height: ['hover']
     },
   },
   plugins: [],

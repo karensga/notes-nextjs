@@ -9,7 +9,7 @@ const clientCredentials = {
     storageBucket: process.env.NEXT_PUBLIC_FIREABSE_STORAGE_BUCKET,
     messagingSenderId: process.env.NEXT_PUBLIC_FIREABSE_MESSAGING_SENDER_ID,
     appId: process.env.NEXT_PUBLIC_FIREABSE_APP_ID,
-    databaseURL: "https://notes-nextjs-default-rtdb.firebaseio.com",
+    databaseURL: process.env.NEXT_PUBLIC_FIREABSE_DATABASE_URL,
 }
 
 let firebaseApp
