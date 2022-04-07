@@ -5,7 +5,7 @@ import Page from '@layouts/page'
 const main = ({children, onNewNote}) => {
     return (
         <BaseLayout>
-            <div className="w-screen h-screen flex">
+            <div className="w-screen h-screen">
                 <Page>
                 {children}
                 </Page>

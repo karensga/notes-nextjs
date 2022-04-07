@@ -35,3 +35,35 @@
 .color:nth-child(5) {
     animation-delay: 750ms;
 }
+
+.bg-colorOne{
+    background-color: #C6D947;
+}
+
+.bg-colorTwo{
+    background-color: #F3542A;
+}
+
+.bg-colorThree{
+    background-color: #F5972C;
+}
+
+.bg-colorFour{
+    background-color: #7049F0;
+}
+
+.bg-colorFive{
+    background-color: #0AA4F6;
+}
+
+
+.sm\:ml-2\/12 {
+    margin-left: 16.666667%;
+} 
+
+@media (min-width: 640px) {
+
+    .sm\:ml-1\/12 {
+        margin-left: 8.333333%;
+    }
+}
